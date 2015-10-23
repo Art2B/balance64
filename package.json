@@ -1,0 +1,19 @@
+{
+  "name": "balance64",
+  "version": "1.0.0",
+  "description": "A base64 to img converter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Art2B/balance64"
+  },
+  "author": "Arthur Battut <arthur.battut@gmail.com> (https://twitter.com/abattut)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Art2B/balance64/issues"
+  },
+  "homepage": "https://github.com/Art2B/balance64"
+}
