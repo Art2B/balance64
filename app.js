@@ -1,8 +1,8 @@
 var fs = require('fs');
 
 var config = {
-  src: './sources/god.html',
-  outputPath: './',
+  inputPath: './sources/',
+  outputPath: './results/',
   regex: /(data:image\/(gif|png|jpg|jpeg);base64,.+?(?="))/gm,
   typeRegex: /(gif|png|jpg|jpeg)/gm
 }
@@ -16,26 +16,31 @@ function getBase64StringData(str){
   return results;
 }
 
-function writeImg(base64String){
+function writeImg(base64String, fileName){
   var type = base64String.match(config.typeRegex)[0];
   var regex = /data:image\/(gif|jpg|jpeg|png);base64,/;
   var dataBase64 = base64String.match(regex)[0];
   var base64 = base64String.replace(dataBase64, '');
-  fs.writeFileSync(config.outputPath+'result.'+type, base64, 'base64');
+  console.log('Writing '+fileName+'.'+type);
+  fs.writeFileSync(config.outputPath+fileName+'.'+type, base64, 'base64');
   return;
 }
 
-console.log('Begin convertion');
-fs.readFile(config.src, 'utf-8',function(err, data){
-  if(err) {
-    return console.log(err);
-  }
+if (!fs.existsSync(config.outputPath)) {
+  fs.mkdirSync(config.outputPath);
+}
 
-  var base64Imgs = getBase64StringData(data);
+var sourcesFiles = fs.readdirSync(config.inputPath);
+console.log('Begin generation');
+for(var i=0; i<sourcesFiles.length; i++){
+  var fileData = fs.readFileSync(config.inputPath+sourcesFiles[i], 'utf-8');
 
-  for(var i=0; i<base64Imgs.length; i++){
-    writeImg(base64Imgs[i]);
+  var base64Imgs = getBase64StringData(fileData);
+
+  for(var j=0; j<base64Imgs.length; j++){
+    var fileName = sourcesFiles[i]+'-'+j;
+    writeImg(base64Imgs[j], fileName);
   }
-  console.log('done');
-  process.exit();
-});
+}
+console.log('Done generating images files');
+process.exit();
